@@ -70,7 +70,26 @@ defmodule Nostr.Client.MixProject do
       ],
       main: "overview",
       formatters: ["html"],
-      extras: ["README.md"]
+      extra_section: "Guides",
+      extras: extras(),
+      groups_for_extras: groups_for_extras()
+    ]
+  end
+
+  defp extras do
+    [
+      # Introduction
+      "docs/introduction/overview.md",
+      "docs/introduction/installation.md",
+      # Guides
+      "docs/guides/basic-usage.md"
+    ]
+  end
+
+  defp groups_for_extras do
+    [
+      Introduction: ~r/docs\/introduction\/.?/,
+      Guides: ~r/docs\/guides\/.?/
     ]
   end
 end
