@@ -3,7 +3,7 @@ defmodule Nostr.Client.Subscriptions do
 
   require Logger
 
-  @child Nostr.Subscription
+  @child Nostr.Client.Subscription
 
   def start_link(init_arg) do
     DynamicSupervisor.start_link(__MODULE__, init_arg, name: __MODULE__)

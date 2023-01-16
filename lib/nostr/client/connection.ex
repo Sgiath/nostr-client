@@ -1,4 +1,4 @@
-defmodule Nostr.Connection do
+defmodule Nostr.Client.Connection do
   use GenServer
 
   require Logger

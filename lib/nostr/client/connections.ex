@@ -3,7 +3,7 @@ defmodule Nostr.Client.Connections do
 
   require Logger
 
-  @child Nostr.Connection
+  @child Nostr.Client.Connection
 
   def start_link(init_arg) do
     DynamicSupervisor.start_link(__MODULE__, init_arg, name: __MODULE__)

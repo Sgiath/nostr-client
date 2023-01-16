@@ -1,4 +1,4 @@
-defmodule Nostr.Subscription do
+defmodule Nostr.Client.Subscription do
   use GenServer
 
   require Logger
