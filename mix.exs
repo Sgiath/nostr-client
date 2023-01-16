@@ -1,7 +1,7 @@
 defmodule Nostr.Client.MixProject do
   use Mix.Project
 
-  @version "0.0.1"
+  @version "0.1.0"
 
   def project do
     [
@@ -33,10 +33,14 @@ defmodule Nostr.Client.MixProject do
 
   defp deps do
     [
-      {:nostr_lib, ">= 0.0.0"},
+      # TODO: change to hex version once secp256k1 library is published
+      {:nostr_lib, github: "Sgiath/nostr-lib"},
+      {:gun, "~> 2.0.0-rc.2"},
 
       # Documentation
-      {:ex_doc, "~> 0.29", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.29", only: :dev, runtime: false},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.1", only: :dev, runtime: false}
     ]
   end
 
