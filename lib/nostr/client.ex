@@ -43,6 +43,7 @@ defmodule Nostr.Client do
   defdelegate disconnect_relay(url), to: Nostr.Client.Connections, as: :terminate_child
   defdelegate get_cons, to: Nostr.Client.Connections, as: :children
   defdelegate set_notice_handler(handler), to: Nostr.Client.Connections
+  defdelegate set_auth_handler(handler), to: Nostr.Client.Connections
 
   defdelegate start_sub(id, filters), to: Nostr.Client.Subscriptions, as: :start_child
   defdelegate start_sub(id, filters, relays), to: Nostr.Client.Subscriptions, as: :start_child

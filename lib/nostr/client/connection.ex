@@ -19,6 +19,7 @@ defmodule Nostr.Client.Connection do
     read_only = Keyword.get(opts, :read_only, false)
 
     notice_handler = Keyword.get(opts, :notice_handler, &Logger.error("Notice from #{&2}: #{&1}"))
+    auth_handler = Keyword.get(opts, :auth_handler, &Logger.warning("Auth from #{&2}: #{&1}"))
 
     port =
       case url do
@@ -43,7 +44,8 @@ defmodule Nostr.Client.Connection do
        url: URI.to_string(url),
        read_only: read_only,
        status: :connecting,
-       notice_handler: notice_handler
+       notice_handler: notice_handler,
+       auth_handler: auth_handler
      }}
   end
 
@@ -55,6 +57,10 @@ defmodule Nostr.Client.Connection do
 
   def handle_cast({:notice_handler, handler}, state) do
     {:noreply, Map.put(state, :notice_handler, handler)}
+  end
+
+  def handle_cast({:auth_handler, handler}, state) do
+    {:noreply, Map.put(state, :auth_handler, handler)}
   end
 
   @impl GenServer
@@ -111,15 +117,18 @@ defmodule Nostr.Client.Connection do
 
   def handle_info({:gun_ws, _conn, _stream, {:text, message}}, state) do
     message
-    |> Nostr.Message.parse()
+    |> Nostr.Message.parse_specific()
     |> case do
       {:event, sub_id, event} ->
         [{pid, nil}] = Registry.lookup(Nostr.Client.SubscriptionRegistry, sub_id)
-        GenServer.cast(pid, {event, state.url})
+        GenServer.cast(pid, {:event, event, state.url})
 
       {:eose, sub_id} ->
         [{pid, nil}] = Registry.lookup(Nostr.Client.SubscriptionRegistry, sub_id)
         GenServer.cast(pid, {:eose, state.url})
+
+      {:auth, challenge} ->
+        state.auth_handler.(challenge, state.url)
 
       {:notice, message} ->
         state.notice_handler.(message, state.url)

@@ -35,7 +35,7 @@ defmodule Nostr.Client.MixProject do
     [
       # TODO: change to hex version once secp256k1 library is published
       {:nostr_lib, github: "Sgiath/nostr-lib"},
-      {:gun, "~> 2.0.0-rc.2"},
+      {:gun, "~> 2.0.0"},
 
       # Documentation
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},

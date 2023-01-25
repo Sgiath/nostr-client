@@ -45,14 +45,14 @@ defmodule Nostr.Client.Subscription do
   end
 
   @impl GenServer
-  def handle_cast({%Nostr.Event{} = event, url}, state) do
+  def handle_cast({:event, event, url}, state) do
     for pid <- state.subscribers do
       send(pid, event)
     end
 
     state =
       state
-      |> Map.update!(:events, &Map.put(&1, event.id, event))
+      |> Map.update!(:events, &Map.put(&1, event.event.id, event))
       |> put_in([:relays, url, :state], :loading)
 
     {:noreply, state}

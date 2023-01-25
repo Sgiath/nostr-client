@@ -41,4 +41,12 @@ defmodule Nostr.Client.Connections do
 
     :ok
   end
+
+  def set_auth_handler(handler) do
+    for {:undefined, pid, :worker, [@child]} <- DynamicSupervisor.which_children(__MODULE__) do
+      GenServer.cast(pid, {:auth_handler, handler})
+    end
+
+    :ok
+  end
 end
